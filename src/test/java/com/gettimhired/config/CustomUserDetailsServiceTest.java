@@ -1,7 +1,7 @@
 package com.gettimhired.config;
 
 import com.gettimhired.TestHelper;
-import com.gettimhired.model.mongo.User;
+import com.gettimhired.model.dto.UserDTO;
 import com.gettimhired.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,12 +25,12 @@ class CustomUserDetailsServiceTest {
 
     @Test
     public void testUserDetailsServiceHappy() {
-        var userOpt = Optional.of(new User(TestHelper.ID, "BARK_PASSWORD", "email", "password", Collections.emptyList()));
-        Mockito.when(userService.findUserByUsername("BARK")).thenReturn(userOpt);
+        var userOpt = Optional.of(new UserDTO(TestHelper.ID, "BARK_PASSWORD", "email", "password", Collections.emptyList()));
+        Mockito.when(userService.findUserById("BARK")).thenReturn(userOpt);
 
         var userDetails = customUserDetailsService.loadUserByUsername("BARK");
 
-        Mockito.verify(userService, Mockito.times(1)).findUserByUsername("BARK");
+        Mockito.verify(userService, Mockito.times(1)).findUserById("BARK");
         Assertions.assertEquals(TestHelper.ID, userDetails.getUsername());
         Assertions.assertEquals("BARK_PASSWORD", userDetails.getPassword());
         Assertions.assertNotNull(userDetails.getAuthorities());
@@ -39,12 +39,12 @@ class CustomUserDetailsServiceTest {
 
     @Test
     public void testUserDetailsServiceUserNotFound() {
-        Optional<User> userOpt = Optional.empty();
-        Mockito.when(userService.findUserByUsername("BARK")).thenReturn(userOpt);
+        Optional<UserDTO> userOpt = Optional.empty();
+        Mockito.when(userService.findUserById("BARK")).thenReturn(userOpt);
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> customUserDetailsService.loadUserByUsername("BARK"));
 
-        Mockito.verify(userService, Mockito.times(1)).findUserByUsername("BARK");
+        Mockito.verify(userService, Mockito.times(1)).findUserById("BARK");
     }
 
 }

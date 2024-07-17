@@ -1,7 +1,6 @@
 package com.gettimhired.config;
 
 import com.gettimhired.model.dto.CustomUserDetails;
-import com.gettimhired.model.mongo.User;
 import com.gettimhired.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var userOpt = userService.findUserByUsername(username);
+        var userOpt = userService.findUserById(username);
 
         if (userOpt.isPresent()) {
             return new CustomUserDetails(

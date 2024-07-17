@@ -1,11 +1,11 @@
 package com.gettimhired.service;
 
+import com.gettimhired.model.dto.UserDTO;
 import com.gettimhired.model.mongo.User;
 import com.gettimhired.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,15 +21,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User createUser() {
-        var password = UUID.randomUUID().toString();
-        var user = new User(UUID.randomUUID().toString(), passwordEncoder.encode(password), "email", "password", Collections.emptyList());
-        userRepository.save(user);
-        return new User(user.id(), password, "email", "password", Collections.emptyList());
-    }
-
-    public Optional<User> findUserByUsername(String username) {
-        return userRepository.findById(username);
+    public Optional<UserDTO> findUserById(String id) {
+        return userRepository.findById(id).map(u -> new UserDTO(
+                u.id(),
+                u.password(),
+                u.email(),
+                u.emailPassword(),
+                u.roles()
+        ));
     }
 
     public void createUser(String email, String password) {
@@ -43,22 +42,29 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    public String generatePassword(User user) {
+    public String generatePassword(UserDTO userDTO) {
         var password = UUID.randomUUID().toString();
         var userToSave = new User(
-                user.id(),
+                userDTO.id(),
                 passwordEncoder.encode(password),
-                user.email(),
-                user.emailPassword(),
-                user.roles()
+                userDTO.email(),
+                userDTO.emailPassword(),
+                userDTO.roles()
         );
 
         userRepository.save(userToSave);
 
         return password;
+    }
+
+    public Optional<UserDTO> findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(u -> new UserDTO(
+                        u.id(),
+                        u.password(),
+                        u.email(),
+                        u.emailPassword(),
+                        u.roles()
+                ));
     }
 }
