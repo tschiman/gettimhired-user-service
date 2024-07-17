@@ -5,7 +5,6 @@ import com.gettimhired.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -22,7 +21,6 @@ public class UserAPI {
     }
 
     @GetMapping("/{id}/id")
-    @PreAuthorize("hasRole('SYSTEM')")
     public ResponseEntity<UserDTO> findUserById(@PathVariable String id) {
         log.info("GET /api/users/{id}/id findUserById id={}", id);
 
@@ -37,7 +35,6 @@ public class UserAPI {
     }
 
     @GetMapping("/{email}/email")
-    @PreAuthorize("hasRole('SYSTEM')")
     public ResponseEntity<UserDTO> findUserByEmail(@PathVariable String email) {
         log.info("GET /api/users/{email}/email findUserByEmail email={}", email);
 
@@ -52,7 +49,6 @@ public class UserAPI {
     }
 
     @PostMapping
-    //anyrequest
     public ResponseEntity createUser(@RequestParam String email, @RequestParam String password) {
         log.info("POST /api/users createUser email={}", email);
 
@@ -65,7 +61,6 @@ public class UserAPI {
     }
 
     @PostMapping("/{email}/password")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> generateApiPassword(@PathVariable String email) {
         log.info("POST /api/users/{email}/password generateApiPassword email={}", email);
         try {
