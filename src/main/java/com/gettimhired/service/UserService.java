@@ -3,10 +3,14 @@ package com.gettimhired.service;
 import com.gettimhired.model.dto.UserDTO;
 import com.gettimhired.model.mongo.User;
 import com.gettimhired.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,10 +19,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RestTemplate restTemplate;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    @Value("${resumeuserservice.mainapp.host}")
+    private String host;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RestTemplate restTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.restTemplate = restTemplate;
     }
 
     public Optional<UserDTO> findUserById(String id) {
@@ -66,5 +75,19 @@ public class UserService {
                         u.emailPassword(),
                         u.roles()
                 ));
+    }
+
+    public void migrateUsers() {
+        ResponseEntity<UserDTO[]> userDtos = restTemplate.getForEntity(host + "/api/users/migrate", UserDTO[].class);
+        for (UserDTO userDTO : Objects.requireNonNull(userDtos.getBody())) {
+            User userToSave = new User(
+                    userDTO.id(),
+                    userDTO.password(),
+                    userDTO.email(),
+                    userDTO.emailPassword(),
+                    userDTO.roles() == null || userDTO.roles().isEmpty() ? List.of("USER") : userDTO.roles()
+            );
+            userRepository.save(userToSave);
+        }
     }
 }
