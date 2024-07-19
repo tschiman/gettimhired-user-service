@@ -34,9 +34,9 @@ public class UserAPI {
         }
     }
 
-    @GetMapping("/{email}/email")
-    public ResponseEntity<UserDTO> findUserByEmail(@PathVariable String email) {
-        log.info("GET /api/users/{email}/email findUserByEmail email={}", email);
+    @GetMapping("/email")
+    public ResponseEntity<UserDTO> findUserByEmail(@RequestParam String email) {
+        log.info("GET /api/users/email findUserByEmail email={}", email);
 
         try {
             Optional<UserDTO> userDtoOpt = userService.findUserByEmail(email);

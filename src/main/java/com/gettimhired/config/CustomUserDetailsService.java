@@ -17,8 +17,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var userOpt = userService.findUserById(username);
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        var userOpt = userService.findUserById(id);
 
         if (userOpt.isPresent()) {
             return new CustomUserDetails(

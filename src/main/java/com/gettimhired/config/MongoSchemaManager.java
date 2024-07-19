@@ -38,14 +38,14 @@ public class MongoSchemaManager {
                     mongoTemplate.indexOps(User.class).ensureIndex(index);
                 }
         );
-        doChangeSet(
-                "changeset-002",
-                "tim.schimandle",
-                "migrate users from main application",
-                () -> {
-                    userService.migrateUsers();
-                }
-        );
+//        doChangeSet(
+//                "changeset-002",
+//                "tim.schimandle",
+//                "migrate users from main application",
+//                () -> {
+//                    userService.migrateUsers();
+//                }
+//        );
     }
 
     private void doChangeSet(String id, String author, String description, Runnable change) {

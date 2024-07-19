@@ -33,8 +33,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/api/users/*/id").hasRole("SYSTEM");
-                    authorize.requestMatchers("/api/users/*/email").hasRole("SYSTEM");
-                    authorize.requestMatchers("/api/users/*/password").hasRole("USER");
+                    authorize.requestMatchers("/api/users/email").hasRole("SYSTEM");
+                    authorize.requestMatchers("/api/users/*/password").hasRole("SYSTEM");
                     authorize.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
                     authorize.anyRequest().authenticated();
                 })
@@ -56,8 +56,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/api/users/*/id").hasRole("SYSTEM");
-                    authorize.requestMatchers("/api/users/*/email").hasRole("SYSTEM");
-                    authorize.requestMatchers("/api/users/*/password").hasRole("USER");
+                    authorize.requestMatchers("/api/users/email").hasRole("SYSTEM");
+                    authorize.requestMatchers("/api/users/*/password").hasRole("SYSTEM");
                     authorize.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
                     authorize.anyRequest().authenticated();
                 })

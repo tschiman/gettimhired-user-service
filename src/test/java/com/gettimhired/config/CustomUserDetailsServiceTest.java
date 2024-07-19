@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 class CustomUserDetailsServiceTest {
@@ -25,7 +25,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     public void testUserDetailsServiceHappy() {
-        var userOpt = Optional.of(new UserDTO(TestHelper.ID, "BARK_PASSWORD", "email", "password", Collections.emptyList()));
+        var userOpt = Optional.of(new UserDTO(TestHelper.ID, "BARK_PASSWORD", "email", "password", List.of("ROLE_SYSTEM")));
         Mockito.when(userService.findUserById("BARK")).thenReturn(userOpt);
 
         var userDetails = customUserDetailsService.loadUserByUsername("BARK");

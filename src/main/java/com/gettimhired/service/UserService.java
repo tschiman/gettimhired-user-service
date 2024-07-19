@@ -85,7 +85,7 @@ public class UserService {
                     userDTO.password(),
                     userDTO.email(),
                     userDTO.emailPassword(),
-                    userDTO.roles() == null || userDTO.roles().isEmpty() ? List.of("USER") : userDTO.roles()
+                    userDTO.roles() == null || userDTO.roles().isEmpty() ? List.of("ROLE_USER") : userDTO.roles()
             );
             userRepository.save(userToSave);
         }
